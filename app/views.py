@@ -24,11 +24,11 @@ def emails():
     # tmp_nodes = list()
     # tmp_edges = list()
     # for email in Email.query.all():
-    #     if email.sender.endswith('hightech.com'):
+    #     if email.sender.endswith('hightech.com') and email.sender[0].isdigit():
     #         tmp_nodes.append(email.sender)
     #         receivers = email.receiver.split(';')
     #         for receiver in receivers:
-    #             if receiver.endswith('hightech.com'):
+    #             if receiver.endswith('hightech.com') and receiver[0].isdigit():
     #                 tmp_edges.append((email.sender, receiver))
     # nodes = list()
     # for node in set(tmp_nodes):
