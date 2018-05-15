@@ -1,10 +1,12 @@
 import os
 from flask import Flask
+from flask_cors import CORS
+
 from .models import db
 from .views import view
 
 
-def create_app(config_name):
+def create_app():
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY=os.urandom(64),
@@ -14,6 +16,7 @@ def create_app(config_name):
         debug=True
     )
 
+    CORS(app)
     db.init_app(app)
     app.register_blueprint(views.view)
 
