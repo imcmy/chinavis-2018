@@ -21,12 +21,17 @@ def Person_data(post_id):
         'department': '',
         'email_subject': '',
         'check_day_time': '',
+        'domain': '',
+        'domain_rank': '',
+        # TOP 5
     }
     data['ip'] = getip(post_id)
     email = getemail(post_id)
     data['email_subject'] = getsubject(email)
     data['department'] = getperson_deparment(post_id)
     data['check_day_time'] = getcheck_time(post_id)
+    data['domain'] = getdomain(post_id)
+    data['domain_rank'] = getdomain_rank(post_id)
     return json.dumps(data, ensure_ascii=False)
 
 
@@ -42,17 +47,65 @@ def getip(id):
         return None
 
 
-# def getcheckinout(id):
-#     sql = "select checkin from checking WHERE id  LIKE '%d'  " % id
-#     cursor.execute(sql)
-#     checkinlist = []
-#     checkins = cursor.fetchall()
-#     if (len(checkins) != 0):
-#         for line in checkins:
-#             checkinlist.append(line[0])
-#         return checkinlist
-#     else:
-#         return None
+def getdomain(id):
+    ip = getip(id)
+    sql = "select `host` from weblog WHERE `sip` LIKE '%s'" % ip
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    domain_list = []
+    domain = []
+    list = [1] * 10000
+    if (len(rows) != 0):
+        for line in rows:
+            if line[0] not in domain_list and line[0] != '':
+                domain_list.append(line[0])
+            elif (line[0] != ''):
+                list[domain_list.index(line[0])] += 1
+            else:
+                pass
+        for id in range(len(domain_list)):
+            domain_dict = {'name': '',
+                           'value': ''}
+            domain_dict['name'] = domain_list[id]
+            domain_dict['value'] = list[id]
+            domain.append(domain_dict)
+        return domain
+    else:
+        return None
+
+
+def getdomain_rank(id):
+    ip = getip(id)
+    sql = "select `host` from weblog WHERE `sip` LIKE '%s'" % ip
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    domain_list = []
+    domain2 = []
+    domain_rank = []
+    list = [1] * 10000
+    if (len(rows) != 0):
+        for line in rows:
+            if line[0] not in domain_list and line[0] != '':
+                domain_list.append(line[0])
+            elif (line[0] != ''):
+                list[domain_list.index(line[0])] += 1
+            else:
+                pass
+        for id in range(len(domain_list)):
+            domain = []
+            domain.append(domain_list[id])
+            domain.append(list[id])
+            domain2.append(domain)
+        rank = sorted(domain2, key=lambda domai: domai[1], reverse=True)
+        if (len(rank) >= 5):
+            for id in range(0, 5):
+                domain_rank.append(rank[id][0])
+        else:
+            for id in range(len(rank)):
+                domain_rank.append(rank[id][0])
+        return domain_rank
+    else:
+        return None
 
 
 def getcheck_time(id):
@@ -107,7 +160,7 @@ def getsubject(email):
                    "value": "",
                    }
             sub["name"] = res[id]
-            sub["value"] = num[res.index(res[id])]
+            sub["value"] = num[id]
             subjectlist.append(sub)
         return subjectlist
     else:
@@ -140,6 +193,8 @@ def getperson_deparment(id):
         return department
     else:
         return None
+
+
 
 
 if __name__ == '__main__':
