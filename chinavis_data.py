@@ -42,7 +42,7 @@ def getip(id):
         return None
 
 
-# def getcheckin(id):
+# def getcheckinout(id):
 #     sql = "select checkin from checking WHERE id  LIKE '%d'  " % id
 #     cursor.execute(sql)
 #     checkinlist = []
@@ -65,18 +65,24 @@ def getcheck_time(id):
             time_list = []
             start = line[0]
             end = line[1]
+            st = start.split(' ')
+            en = end.split(' ')
             day = line[2]
             str = datetime.date.strftime(day, '%Y-%m-%d')
             time_list.append(str)
             if (start == '0' and end == '0'):
                 result = 0
                 time_list.append(result)
+                time_list.append('0')
+                time_list.append('0')
             else:
                 date1 = datetime.datetime.strptime(start, '%Y/%m/%d %H:%M')
                 date2 = datetime.datetime.strptime(end, '%Y/%m/%d %H:%M')
                 an = date2 - date1
                 an = an.total_seconds()
                 time_list.append(round(an / 3600, 1))
+                time_list.append(st[1])
+                time_list.append(en[1])
             arraylist.append(time_list)
         return arraylist
     else:
