@@ -19,42 +19,65 @@ def users():
     return resp
 
 
+@view.route('/emails_full', methods=('GET',))
+def emails_full():
+    resp = make_response(open(os.path.join(base_dir, 'emails_full.json')).read())
+    resp.headers["Content-type"] = "application/json;charset=UTF-8"
+    return resp
+
+
+def category_name(depart, email):
+    category_names = {"0": "总经理",
+                     "1": "人力资源",
+                     # "2": "财务",
+                     "3.1": "研发小组1组长",
+                     "3.1.1": "研发小组1-1",
+                     "3.1.2": "研发小组1-2",
+                     "3.1.3": "研发小组1-3",
+                     "3.1.4": "研发小组1-4",
+                     "3.1.5": "研发小组1-5",
+                     "3.1.6": "研发小组1-6",
+                     "3.1.7": "研发小组1-7",
+                     "3.1.8": "研发小组1-8",
+                     "3.1.9": "研发小组1-9",
+                     "3.2": "研发小组2组长",
+                     "3.2.1": "研发小组2-1",
+                     "3.2.2": "研发小组2-2",
+                     "3.2.3": "研发小组2-3",
+                     "3.2.4": "研发小组2-4",
+                     "3.2.5": "研发小组2-5",
+                     "3.2.6": "研发小组2-6",
+                     "3.2.7": "研发小组2-7",
+                     "3.2.8": "研发小组2-8",
+                     "3.2.9": "研发小组2-9",
+                     "3.2.10": "研发小组2-10",
+                     "3.2.11": "研发小组2-11",
+                     "3.3": "研发小组3组长",
+                     "3.3.1": "研发小组3-1",
+                     "3.3.2": "研发小组3-2",
+                     "3.3.3": "研发小组3-3",
+                     "3.3.4": "研发小组3-4",
+                     "3.3.5": "研发小组3-5",
+                     "3.3.6": "研发小组3-6",
+                     "3.3.7": "研发小组3-7"}
+    if depart in category_names:
+        return category_names[depart]
+    elif depart == '2':
+        return '财务-' + email
+    else:
+        return email
+
+
+@view.route('/emails_fin', methods=('GET',))
+def emails_fin():
+    resp = make_response(open(os.path.join(base_dir, 'emails_fin.json')).read())
+    resp.headers["Content-type"] = "application/json;charset=UTF-8"
+    return resp
+
+
 @view.route('/emails', methods=('GET',))
 def emails():
-    # categoryNames = {"0": "总经理",
-    #                  "1": "人力资源",
-    #                  "2": "财务",
-    #                  "3.1": "研发小组1组长",
-    #                  "3.1.1": "研发小组1-1",
-    #                  "3.1.2": "研发小组1-2",
-    #                  "3.1.3": "研发小组1-3",
-    #                  "3.1.4": "研发小组1-4",
-    #                  "3.1.5": "研发小组1-5",
-    #                  "3.1.6": "研发小组1-6",
-    #                  "3.1.7": "研发小组1-7",
-    #                  "3.1.8": "研发小组1-8",
-    #                  "3.1.9": "研发小组1-9",
-    #                  "3.2": "研发小组2组长",
-    #                  "3.2.1": "研发小组2-1",
-    #                  "3.2.2": "研发小组2-2",
-    #                  "3.2.3": "研发小组2-3",
-    #                  "3.2.4": "研发小组2-4",
-    #                  "3.2.5": "研发小组2-5",
-    #                  "3.2.6": "研发小组2-6",
-    #                  "3.2.7": "研发小组2-7",
-    #                  "3.2.8": "研发小组2-8",
-    #                  "3.2.9": "研发小组2-9",
-    #                  "3.2.10": "研发小组2-10",
-    #                  "3.2.11": "研发小组2-11",
-    #                  "3.3": "研发小组3组长",
-    #                  "3.3.1": "研发小组3-1",
-    #                  "3.3.2": "研发小组3-2",
-    #                  "3.3.3": "研发小组3-3",
-    #                  "3.3.4": "研发小组3-4",
-    #                  "3.3.5": "研发小组3-5",
-    #                  "3.3.6": "研发小组3-6",
-    #                  "3.3.7": "研发小组3-7"}
-    # categories = {user.email: categoryNames[user.depart] for user in User.query.all()
+    # categories = {user.email: category_name(user.depart, user.email) for user in User.query.all()
     #               if user.depart is not None}
     #
     # tmp_nodes = dict()
