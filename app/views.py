@@ -1,5 +1,5 @@
 import os
-from .models import Email
+from .models import User, Email
 from flask import Blueprint, request, jsonify, make_response
 
 view = Blueprint('view', __name__, url_prefix='/')
@@ -31,8 +31,18 @@ def emails():
     #             if receiver.endswith('hightech.com') and receiver[0].isdigit():
     #                 tmp_edges.append((email.sender, receiver))
     # nodes = list()
-    # for node in set(tmp_nodes):
-    #     nodes.append({"id": node, "name": node, "weight": tmp_nodes.count(node)})
+    # for user in User.query.all():
+    #     if user.depart is not None:
+    #         if user.depart == '0':
+    #             department = '总经理'
+    #         elif user.depart == '1':
+    #             department = '人力资源'
+    #         elif user.depart == '2':
+    #             department = '财务'
+    #         else:
+    #             department = '研发小组' + user.depart.split('.')[1]
+    #         nodes.append({"id": user.email, "name": user.email,
+    #                       "weight": tmp_nodes.count(user.email), "category": department})
     # edges = list()
     # for index, edge in enumerate(set(tmp_edges)):
     #     edges.append({"id": index, "source": edge[0], "target": edge[1], "weight": tmp_edges.count(edge)})
