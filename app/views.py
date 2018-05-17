@@ -7,7 +7,7 @@ view = Blueprint('view', __name__, url_prefix='/')
 base_dir = os.path.dirname(__file__)
 
 
-@view.route('/hello', methods=('GET', 'POST'))
+@view.route('/', methods=('GET', 'POST'))
 def hello():
     return "Hello World"
 

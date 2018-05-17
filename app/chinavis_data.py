@@ -1,20 +1,16 @@
-from flask import Flask
+from flask import Blueprint
 import pymysql
 import json
 import datetime
 
-app = Flask(__name__)
 
 db = pymysql.connect("123.206.64.248", "root", "chinavis2018", "chinavis", charset='utf8')
 cursor = db.cursor()
 
-
-@app.route('/')
-def hello_world():
-    return 'Hello World!!!'
+data = Blueprint('data', __name__, url_prefix='/')
 
 
-@app.route('/<int:post_id>', methods=['GET', 'POST'])
+@data.route('/<int:post_id>', methods=['GET', 'POST'])
 def Person_data(post_id):
     data = {
         'ip': '',
@@ -28,7 +24,7 @@ def Person_data(post_id):
     data['ip'] = getip(post_id)
     email = getemail(post_id)
     data['email_subject'] = getsubject(email)
-    data['department'] = getperson_deparment(post_id)
+    data['department'] = getperson_department(post_id)
     data['check_day_time'] = getcheck_time(post_id)
     data['domain'] = getdomain(post_id)
     data['domain_rank'] = getdomain_rank(post_id)
@@ -39,7 +35,7 @@ def getip(id):
     sql = "select `ip` from link WHERE `id` LIKE '%d'  " % id
     cursor.execute(sql)
     rows = cursor.fetchall()
-    if (len(rows) != 0):
+    if len(rows) != 0:
         for line in rows:
             ip = line[0]
         return ip
@@ -55,11 +51,11 @@ def getdomain(id):
     domain_list = []
     domain = []
     list = [1] * 10000
-    if (len(rows) != 0):
+    if len(rows) != 0:
         for line in rows:
             if line[0] not in domain_list and line[0] != '':
                 domain_list.append(line[0])
-            elif (line[0] != ''):
+            elif line[0] != '':
                 list[domain_list.index(line[0])] += 1
             else:
                 pass
@@ -83,11 +79,11 @@ def getdomain_rank(id):
     domain2 = []
     domain_rank = []
     list = [1] * 10000
-    if (len(rows) != 0):
+    if len(rows) != 0:
         for line in rows:
             if line[0] not in domain_list and line[0] != '':
                 domain_list.append(line[0])
-            elif (line[0] != ''):
+            elif line[0] != '':
                 list[domain_list.index(line[0])] += 1
             else:
                 pass
@@ -97,7 +93,7 @@ def getdomain_rank(id):
             domain.append(list[id])
             domain2.append(domain)
         rank = sorted(domain2, key=lambda domai: domai[1], reverse=True)
-        if (len(rank) >= 5):
+        if len(rank) >= 5:
             for id in range(0, 5):
                 domain_rank.append(rank[id][0])
         else:
@@ -113,7 +109,7 @@ def getcheck_time(id):
     cursor.execute(sql)
     rows = cursor.fetchall()
     arraylist = []
-    if (len(rows) != 0):
+    if len(rows) != 0:
         for line in rows:
             time_list = []
             start = line[0]
@@ -123,7 +119,7 @@ def getcheck_time(id):
             day = line[2]
             str = datetime.date.strftime(day, '%Y-%m-%d')
             time_list.append(str)
-            if (start == '0' and end == '0'):
+            if start == '0' and end == '0':
                 result = 0
                 time_list.append(result)
                 time_list.append('0')
@@ -149,16 +145,15 @@ def getsubject(email):
     sql = "SELECT `subject` FROM email WHERE `sender` LIKE '%s'" % email
     cursor.execute(sql)
     subject = cursor.fetchall()
-    if (len(subject) != 0):
+    if len(subject) != 0:
         for line in subject:
-            if (line[0] not in res):
+            if line[0] not in res:
                 res.append(line[0])
             else:
                 num[res.index(line[0])] += 1
         for id in range(len(res)):
             sub = {"name": "",
-                   "value": "",
-                   }
+                   "value": ""}
             sub["name"] = res[id]
             sub["value"] = num[id]
             subjectlist.append(sub)
@@ -171,14 +166,14 @@ def getemail(id):
     sql = "SELECT `email` FROM link WHERE `id` LIKE '%d' " % id
     cursor.execute(sql)
     email = cursor.fetchall()
-    if (len(email) != 0):
+    if len(email) != 0:
         for line in email:
             return line[0]
     else:
         return None
 
 
-def getperson_deparment(id):
+def getperson_department(id):
     sql = "select `department`,`position` from department WHERE id  LIKE '%d'  " % id
     cursor.execute(sql)
     department = {
@@ -186,17 +181,10 @@ def getperson_deparment(id):
         "position": "",
     }
     res = cursor.fetchall()
-    if (len(res) != 0):
+    if len(res) != 0:
         for line in res:
             department['department'] = line[0]
             department['position'] = line[1]
         return department
     else:
         return None
-
-
-
-
-if __name__ == '__main__':
-    app.run()
-    db.close()
