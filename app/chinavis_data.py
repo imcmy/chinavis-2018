@@ -5,7 +5,7 @@ import datetime
 
 
 db = pymysql.connect("123.206.64.248", "root", "chinavis2018", "chinavis", charset='utf8')
-cursor = db.cursor()
+
 
 data = Blueprint('data', __name__, url_prefix='/')
 
@@ -32,9 +32,11 @@ def Person_data(post_id):
 
 
 def getip(id):
+    cursor = db.cursor()
     sql = "select `ip` from link WHERE `id` LIKE '%d'  " % id
     cursor.execute(sql)
     rows = cursor.fetchall()
+    cursor.close()
     if len(rows) != 0:
         for line in rows:
             ip = line[0]
@@ -44,10 +46,12 @@ def getip(id):
 
 
 def getdomain(id):
+    cursor = db.cursor()
     ip = getip(id)
     sql = "select `host` from weblog WHERE `sip` LIKE '%s'" % ip
     cursor.execute(sql)
     rows = cursor.fetchall()
+    cursor.close()
     domain_list = []
     domain = []
     list = [1] * 10000
@@ -62,7 +66,7 @@ def getdomain(id):
         for id in range(len(domain_list)):
             domain_dict = {'name': '',
                            'value': ''}
-            domain_dict['name'] = domain_list[id]
+            domain_dict['name'] = urltodomain(domain_list[id])
             domain_dict['value'] = list[id]
             domain.append(domain_dict)
         return domain
@@ -71,10 +75,12 @@ def getdomain(id):
 
 
 def getdomain_rank(id):
+    cursor = db.cursor()
     ip = getip(id)
     sql = "select `host` from weblog WHERE `sip` LIKE '%s'" % ip
     cursor.execute(sql)
     rows = cursor.fetchall()
+    cursor.close()
     domain_list = []
     domain2 = []
     domain_rank = []
@@ -95,19 +101,21 @@ def getdomain_rank(id):
         rank = sorted(domain2, key=lambda domai: domai[1], reverse=True)
         if len(rank) >= 5:
             for id in range(0, 5):
-                domain_rank.append(rank[id][0])
+                domain_rank.append(urltodomain(rank[id][0]))
         else:
             for id in range(len(rank)):
-                domain_rank.append(rank[id][0])
+                domain_rank.append(urltodomain(rank[id][0]))
         return domain_rank
     else:
         return None
 
 
 def getcheck_time(id):
+    cursor = db.cursor()
     sql = "select  `checkin`,`checkout`,`day` from checking WHERE id  LIKE '%d'  " % id
     cursor.execute(sql)
     rows = cursor.fetchall()
+    cursor.close()
     arraylist = []
     if len(rows) != 0:
         for line in rows:
@@ -139,12 +147,14 @@ def getcheck_time(id):
 
 
 def getsubject(email):
+    cursor = db.cursor()
     subjectlist = []
     res = []
     num = [1] * 200
     sql = "SELECT `subject` FROM email WHERE `sender` LIKE '%s'" % email
     cursor.execute(sql)
     subject = cursor.fetchall()
+    cursor.close()
     if len(subject) != 0:
         for line in subject:
             if line[0] not in res:
@@ -163,9 +173,11 @@ def getsubject(email):
 
 
 def getemail(id):
+    cursor = db.cursor()
     sql = "SELECT `email` FROM link WHERE `id` LIKE '%d' " % id
     cursor.execute(sql)
     email = cursor.fetchall()
+    cursor.close()
     if len(email) != 0:
         for line in email:
             return line[0]
@@ -174,6 +186,7 @@ def getemail(id):
 
 
 def getperson_department(id):
+    cursor = db.cursor()
     sql = "select `department`,`position` from department WHERE id  LIKE '%d'  " % id
     cursor.execute(sql)
     department = {
@@ -181,6 +194,7 @@ def getperson_department(id):
         "position": "",
     }
     res = cursor.fetchall()
+    cursor.close()
     if len(res) != 0:
         for line in res:
             department['department'] = line[0]
@@ -190,13 +204,16 @@ def getperson_department(id):
         return None
 
 
-# def urltodomain(url):
-#     sql = "select `domain` from url_domain WHERE `url` LIKE '%s'  " % url
-#     cursor.execute(sql)
-#     rows = cursor.fetchall()
-#     if (len(rows) != 0):
-#         for line in rows:
-#             domain = line[0]
-#         return domain
-#     else:
-#         return None
+def urltodomain(url):
+    cursor = db.cursor()
+    sql = "select `domain` from url_domain WHERE `url` LIKE '%s'  " % url
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    cursor.close()
+    if (len(rows) != 0):
+        for line in rows:
+            domain = line[0]
+        return domain
+    else:
+        return None
+
