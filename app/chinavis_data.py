@@ -10,6 +10,11 @@ cursor = db.cursor()
 data = Blueprint('data', __name__, url_prefix='/')
 
 
+@data.route('/hello', methods=['GET', 'POST'])
+def test():
+    return "测试成功"
+
+
 @data.route('/<int:post_id>', methods=['GET', 'POST'])
 def Person_data(post_id):
     data = {
@@ -200,6 +205,3 @@ def urltodomain(url):
     else:
         return None
 
-@data.route('/hello/', methods=['GET', 'POST'])
-def test():
-    return "测试成功"
