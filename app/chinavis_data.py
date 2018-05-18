@@ -62,7 +62,7 @@ def getdomain(id):
         for id in range(len(domain_list)):
             domain_dict = {'name': '',
                            'value': ''}
-            domain_dict['name'] = urltodomain(domain_list[id])
+            domain_dict['name'] = domain_list[id]
             domain_dict['value'] = list[id]
             domain.append(domain_dict)
         return domain
@@ -95,10 +95,10 @@ def getdomain_rank(id):
         rank = sorted(domain2, key=lambda domai: domai[1], reverse=True)
         if len(rank) >= 5:
             for id in range(0, 5):
-                domain_rank.append(urltodomain(rank[id][0]))
+                domain_rank.append(rank[id][0])
         else:
             for id in range(len(rank)):
-                domain_rank.append(urltodomain(rank[id][0]))
+                domain_rank.append(rank[id][0])
         return domain_rank
     else:
         return None
@@ -190,13 +190,13 @@ def getperson_department(id):
         return None
 
 
-def urltodomain(url):
-    sql = "select `domain` from url_domain WHERE `url` LIKE '%s'  " % url
-    cursor.execute(sql)
-    rows = cursor.fetchall()
-    if (len(rows) != 0):
-        for line in rows:
-            domain = line[0]
-        return domain
-    else:
-        return None
+# def urltodomain(url):
+#     sql = "select `domain` from url_domain WHERE `url` LIKE '%s'  " % url
+#     cursor.execute(sql)
+#     rows = cursor.fetchall()
+#     if (len(rows) != 0):
+#         for line in rows:
+#             domain = line[0]
+#         return domain
+#     else:
+#         return None
