@@ -10,9 +10,9 @@ cursor = db.cursor()
 data = Blueprint('data', __name__, url_prefix='/')
 
 
-@data.route('/hello', methods=['GET', 'POST'])
+@data.route('/test', methods=['GET', 'POST'])
 def test():
-    return "测试成功"
+    return "连接成功"
 
 
 @data.route('/<int:post_id>', methods=['GET', 'POST'])
