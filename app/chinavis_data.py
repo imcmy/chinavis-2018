@@ -5,7 +5,7 @@ import datetime
 
 
 db = pymysql.connect("123.206.64.248", "root", "chinavis2018", "chinavis", charset='utf8')
-
+cursor = db.cursor()
 
 data = Blueprint('data', __name__, url_prefix='/')
 
@@ -19,7 +19,6 @@ def Person_data(post_id):
         'check_day_time': '',
         'domain': '',
         'domain_rank': '',
-        # TOP 5
     }
     data['ip'] = getip(post_id)
     email = getemail(post_id)
@@ -32,11 +31,9 @@ def Person_data(post_id):
 
 
 def getip(id):
-    cursor = db.cursor()
     sql = "select `ip` from link WHERE `id` LIKE '%d'  " % id
     cursor.execute(sql)
     rows = cursor.fetchall()
-    cursor.close()
     if len(rows) != 0:
         for line in rows:
             ip = line[0]
@@ -46,12 +43,10 @@ def getip(id):
 
 
 def getdomain(id):
-    cursor = db.cursor()
     ip = getip(id)
     sql = "select `host` from weblog WHERE `sip` LIKE '%s'" % ip
     cursor.execute(sql)
     rows = cursor.fetchall()
-    cursor.close()
     domain_list = []
     domain = []
     list = [1] * 10000
@@ -75,12 +70,10 @@ def getdomain(id):
 
 
 def getdomain_rank(id):
-    cursor = db.cursor()
     ip = getip(id)
     sql = "select `host` from weblog WHERE `sip` LIKE '%s'" % ip
     cursor.execute(sql)
     rows = cursor.fetchall()
-    cursor.close()
     domain_list = []
     domain2 = []
     domain_rank = []
@@ -111,11 +104,9 @@ def getdomain_rank(id):
 
 
 def getcheck_time(id):
-    cursor = db.cursor()
     sql = "select  `checkin`,`checkout`,`day` from checking WHERE id  LIKE '%d'  " % id
     cursor.execute(sql)
     rows = cursor.fetchall()
-    cursor.close()
     arraylist = []
     if len(rows) != 0:
         for line in rows:
@@ -147,14 +138,12 @@ def getcheck_time(id):
 
 
 def getsubject(email):
-    cursor = db.cursor()
     subjectlist = []
     res = []
     num = [1] * 200
     sql = "SELECT `subject` FROM email WHERE `sender` LIKE '%s'" % email
     cursor.execute(sql)
     subject = cursor.fetchall()
-    cursor.close()
     if len(subject) != 0:
         for line in subject:
             if line[0] not in res:
@@ -173,11 +162,9 @@ def getsubject(email):
 
 
 def getemail(id):
-    cursor = db.cursor()
     sql = "SELECT `email` FROM link WHERE `id` LIKE '%d' " % id
     cursor.execute(sql)
     email = cursor.fetchall()
-    cursor.close()
     if len(email) != 0:
         for line in email:
             return line[0]
@@ -186,7 +173,6 @@ def getemail(id):
 
 
 def getperson_department(id):
-    cursor = db.cursor()
     sql = "select `department`,`position` from department WHERE id  LIKE '%d'  " % id
     cursor.execute(sql)
     department = {
@@ -194,7 +180,6 @@ def getperson_department(id):
         "position": "",
     }
     res = cursor.fetchall()
-    cursor.close()
     if len(res) != 0:
         for line in res:
             department['department'] = line[0]
@@ -205,11 +190,9 @@ def getperson_department(id):
 
 
 def urltodomain(url):
-    cursor = db.cursor()
     sql = "select `domain` from url_domain WHERE `url` LIKE '%s'  " % url
     cursor.execute(sql)
     rows = cursor.fetchall()
-    cursor.close()
     if (len(rows) != 0):
         for line in rows:
             domain = line[0]
@@ -217,3 +200,6 @@ def urltodomain(url):
     else:
         return None
 
+@data.route('/hello/', methods=['GET', 'POST'])
+def test():
+    return "测试成功"
