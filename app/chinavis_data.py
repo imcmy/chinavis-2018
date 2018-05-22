@@ -325,7 +325,7 @@ def dataa(post_id):
     ip = getip(post_id)
 
     da = {"sip": '',
-          "upink_length": '',
+          "uplink_length": '',
           "downlink_length":'',}
     da['sip'] = ip
     da['uplink_length'] = getuplinkdata(ip)
