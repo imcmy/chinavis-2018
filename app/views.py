@@ -1,10 +1,10 @@
 import os
-from .models import User, Email
+from .models import User, Email, WebRecord
 from flask import Blueprint, request, jsonify, make_response
 
 view = Blueprint('view', __name__, url_prefix='/')
 
-base_dir = os.path.dirname(__file__)
+base_dir = os.path.dirname(__file__) + '/json_statics/'
 
 
 @view.route('/', methods=('GET', 'POST'))
@@ -114,5 +114,53 @@ def emails():
     #
     # return jsonify({"categories": [{"name": category} for category in categories.values()], "nodes": nodes, "links": edges})
     resp = make_response(open(os.path.join(base_dir, 'emails.json')).read())
+    resp.headers["Content-type"] = "application/json;charset=UTF-8"
+    return resp
+
+
+@view.route('/weblog_record_users', methods=('GET',))
+def weblog_record_users():
+    # logs = []
+    # tags = ['开发', '办公', '赌博', '购物', '技术', '搜索', '娱乐', '招聘']
+    # for user in User.query.all():
+    #     records = WebRecord.query.filter_by(id=user.id)
+    #     values = [0] * len(tags)
+    #     for record in records:
+    #         index = tags.index(record.tag)
+    #         values[index] = record.record
+    #     logs.append({"value": values, "name": record.id, "depart": record.depart})
+    # return jsonify(logs)
+    resp = make_response(open(os.path.join(base_dir, 'weblog_record_users.json')).read())
+    resp.headers["Content-type"] = "application/json;charset=UTF-8"
+    return resp
+
+
+@view.route('/weblog_record_groups', methods=('GET',))
+def weblog_record_groups():
+    # tags = ['开发', '办公', '赌博', '购物', '技术', '搜索', '娱乐', '招聘']
+    # logs = [{"value": [0] * len(tags), "name": "1067", "depart": "0"},
+    #         {"value": [0] * len(tags), "name": "人力资源", "depart": "1"},
+    #         {"value": [0] * len(tags), "name": "财务", "depart": "2"},
+    #         {"value": [0] * len(tags), "name": "研发部门1", "depart": "3.1"},
+    #         {"value": [0] * len(tags), "name": "研发部门2", "depart": "3.2"},
+    #         {"value": [0] * len(tags), "name": "研发部门3", "depart": "3.3"}]
+    # for user in User.query.all():
+    #     records = WebRecord.query.filter_by(id=user.id)
+    #     for record in records:
+    #         index = tags.index(record.tag)
+    #         if record.depart.startswith('0'):
+    #             logs[0]['value'][index] += record.record
+    #         elif record.depart.startswith('1'):
+    #             logs[1]['value'][index] += record.record
+    #         elif record.depart.startswith('2'):
+    #             logs[2]['value'][index] += record.record
+    #         elif record.depart.startswith('3.1'):
+    #             logs[3]['value'][index] += record.record
+    #         elif record.depart.startswith('3.2'):
+    #             logs[4]['value'][index] += record.record
+    #         elif record.depart.startswith('3.3'):
+    #             logs[5]['value'][index] += record.record
+    # return jsonify(logs)
+    resp = make_response(open(os.path.join(base_dir, 'weblog_record_groups.json')).read())
     resp.headers["Content-type"] = "application/json;charset=UTF-8"
     return resp

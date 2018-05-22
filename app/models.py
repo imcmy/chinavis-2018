@@ -29,3 +29,13 @@ class Email(db.Model):
     sender = db.Column(db.String)
     receiver = db.Column(db.String)
     subject = db.Column(db.String)
+
+
+class WebRecord(db.Model):
+    __tablename__ = 'weblog_record'
+
+    uuid = db.Column(db.Integer, primary_key=True)
+    depart = db.Column(db.String(255))
+    id = db.Column(db.String(4))
+    tag = db.Column(db.String(255))
+    record = db.Column(db.Integer)
