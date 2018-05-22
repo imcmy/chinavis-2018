@@ -205,3 +205,133 @@ def urltodomain(url):
     else:
         return None
 
+
+
+
+
+def strintodatetime(str):
+    date_time = datetime.datetime.strptime(str, '%Y-%m-%d %H:%M')
+    return date_time
+
+
+def datetimeintostr(date_time):
+    str = datetime.datetime.strftime(date_time, '%Y-%m-%d %H:%M')
+    return str
+
+
+def time_list():
+    list = []
+    for k1 in range(1, 31):
+        if k1 < 10:
+            k1 = k1.__str__()
+            k1 = '0' + k1
+        for k2 in range(0, 24):
+            if k2 < 10:
+                k2 = k2.__str__()
+                k2 = '0' + k2
+            str = '2017-11-' + k1.__str__() + ' ' + k2.__str__() + ':00'
+
+            list.append(str)
+    return list
+
+
+def getuplinkdata(ip):
+    count_list = [0] * 721
+
+    res_list = []
+    time_date_list = time_list()
+    ti = 0
+    sql = "SELECT stime,uplink_length FROM tcpLog WHERE sip LIKE '%s'" % ip
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    result = [0] * 721
+    for line in rows:
+        timee = line[0]
+        for id in time_date_list:
+            if (timee > strintodatetime(id) and datetimeintostr(timee)[11:13] != '23'):
+                pass
+            elif (datetimeintostr(timee)[11:13] == '23' and time_date_list[time_date_list.index(id) - 1] not in result):
+                ti = time_date_list.index(id)
+                result[ti] = time_date_list[ti]
+                count_list[ti] += line[1]
+                break
+            elif (datetimeintostr(timee)[11:13] == '23' and time_date_list[time_date_list.index(id) - 1] in result):
+                ti = time_date_list.index(id)
+                count_list[ti] += line[1]
+                break
+            elif (time_date_list[time_date_list.index(id) - 1] not in result):
+                ti = time_date_list.index(id) - 1
+                result[ti] = time_date_list[ti]
+                count_list[ti] += line[1]
+                break
+            elif (time_date_list[time_date_list.index(id) - 1] in result):
+                ti = time_date_list.index(id) - 1
+                count_list[ti] += line[1]
+                break
+    for id in time_date_list:
+        res = []
+        if (result[time_date_list.index(id)] == 0):
+            res.append(id)
+        else:
+            res.append(result[time_date_list.index(id)])
+        res.append(count_list[time_date_list.index(id)])
+        res_list.append(res)
+    return res_list
+
+def getdownlinkdata(ip):
+    count_list = [0] * 721
+
+    res_list = []
+    time_date_list = time_list()
+    ti = 0
+    sql = "SELECT stime,downlink_length FROM tcpLog WHERE sip LIKE '%s'" % ip
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    result = [0] * 721
+    for line in rows:
+        timee = line[0]
+        for id in time_date_list:
+            if (timee > strintodatetime(id) and datetimeintostr(timee)[11:13] != '23'):
+                pass
+            elif (datetimeintostr(timee)[11:13] == '23' and time_date_list[time_date_list.index(id) - 1] not in result):
+                ti = time_date_list.index(id)
+                result[ti] = time_date_list[ti]
+                count_list[ti] += line[1]
+                break
+            elif (datetimeintostr(timee)[11:13] == '23' and time_date_list[time_date_list.index(id) - 1] in result):
+                ti = time_date_list.index(id)
+                count_list[ti] += line[1]
+                break
+            elif (time_date_list[time_date_list.index(id) - 1] not in result):
+                ti = time_date_list.index(id) - 1
+                result[ti] = time_date_list[ti]
+                count_list[ti] += line[1]
+                break
+            elif (time_date_list[time_date_list.index(id) - 1] in result):
+                ti = time_date_list.index(id) - 1
+                count_list[ti] += line[1]
+                break
+    for id in time_date_list:
+        res = []
+        if (result[time_date_list.index(id)] == 0):
+            res.append(id)
+        else:
+            res.append(result[time_date_list.index(id)])
+        res.append(count_list[time_date_list.index(id)])
+        res_list.append(res)
+    return res_list
+
+
+@data.route('/tcp/<int:post_id>', methods=['GET', 'POST'])
+def data(post_id):
+    ip = getip(post_id)
+
+    da = {"sip": '',
+          "upink_length": '',
+          "downlink_length":'',}
+    da['sip'] = ip
+    da['uplink_length'] = getuplinkdata(ip)
+    da['downlink_length'] = getdownlinkdata(ip)
+    return json.dumps(da, ensure_ascii=False)
+
+
