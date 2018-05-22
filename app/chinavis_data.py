@@ -207,8 +207,6 @@ def urltodomain(url):
 
 
 
-
-
 def strintodatetime(str):
     date_time = datetime.datetime.strptime(str, '%Y-%m-%d %H:%M')
     return date_time
@@ -323,7 +321,7 @@ def getdownlinkdata(ip):
 
 
 @data.route('/tcp/<int:post_id>', methods=['GET', 'POST'])
-def data(post_id):
+def dataa(post_id):
     ip = getip(post_id)
 
     da = {"sip": '',
