@@ -122,7 +122,7 @@ def emails():
 @view.route('/weblog_record_users/<group_id>', methods=('GET',))
 def weblog_record_users(group_id):
     # logs = []
-    # tags = ['开发', '办公', '赌博', '购物', '技术', '搜索', '娱乐', '招聘']
+    # tags = ['办公', '购物', '娱乐', '搜索', '开发', '技术', '赌博', '招聘']
     # for user in User.query.all():
     #     records = WebRecord.query.filter_by(id=user.id)
     #     values = [0] * len(tags)
@@ -144,7 +144,7 @@ def weblog_record_users(group_id):
 
 @view.route('/weblog_record_groups/<group_id>', methods=('GET',))
 def weblog_record_groups(group_id):
-    # tags = ['开发', '办公', '赌博', '购物', '技术', '搜索', '娱乐', '招聘']
+    # tags = ['办公', '购物', '娱乐', '搜索', '开发', '技术', '赌博', '招聘']
     # logs = [{"value": [0] * len(tags), "name": "1067", "depart": "0"},
     #         {"value": [0] * len(tags), "name": "人力资源", "depart": "1"},
     #         {"value": [0] * len(tags), "name": "财务", "depart": "2"},
