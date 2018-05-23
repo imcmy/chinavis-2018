@@ -119,8 +119,8 @@ def emails():
     return resp
 
 
-@view.route('/weblog_record_users', methods=('GET',))
-def weblog_record_users():
+@view.route('/weblog_record_users/<group_id>', methods=('GET',))
+def weblog_record_users(group_id):
     # logs = []
     # tags = ['开发', '办公', '赌博', '购物', '技术', '搜索', '娱乐', '招聘']
     # for user in User.query.all():
@@ -131,9 +131,15 @@ def weblog_record_users():
     #         values[index] = record.record
     #     logs.append({"value": values, "name": record.id, "depart": record.depart})
     # return jsonify(logs)
-    resp = make_response(open(os.path.join(base_dir, 'weblog_record_users.json')).read())
-    resp.headers["Content-type"] = "application/json;charset=UTF-8"
-    return resp
+    # resp = make_response(open(os.path.join(base_dir, 'weblog_record_users.json')).read())
+    # resp.headers["Content-type"] = "application/json;charset=UTF-8"
+    # return resp
+    groups = []
+    users = json.loads(open(os.path.join(base_dir, 'weblog_record_users.json')).read())
+    for user in users:
+        if user['depart'].startswith(group_id):
+            groups.append(user)
+    return jsonify(groups)
 
 
 @view.route('/weblog_record_groups/<group_id>', methods=('GET',))
