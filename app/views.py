@@ -1,4 +1,5 @@
 import os
+import json
 from .models import User, Email, WebRecord
 from flask import Blueprint, request, jsonify, make_response
 
@@ -135,8 +136,8 @@ def weblog_record_users():
     return resp
 
 
-@view.route('/weblog_record_groups', methods=('GET',))
-def weblog_record_groups():
+@view.route('/weblog_record_groups/<group_id>', methods=('GET',))
+def weblog_record_groups(group_id):
     # tags = ['开发', '办公', '赌博', '购物', '技术', '搜索', '娱乐', '招聘']
     # logs = [{"value": [0] * len(tags), "name": "1067", "depart": "0"},
     #         {"value": [0] * len(tags), "name": "人力资源", "depart": "1"},
@@ -161,6 +162,11 @@ def weblog_record_groups():
     #         elif record.depart.startswith('3.3'):
     #             logs[5]['value'][index] += record.record
     # return jsonify(logs)
-    resp = make_response(open(os.path.join(base_dir, 'weblog_record_groups.json')).read())
-    resp.headers["Content-type"] = "application/json;charset=UTF-8"
-    return resp
+    # resp = make_response(open(os.path.join(base_dir, 'weblog_record_groups.json')).read())
+    # resp.headers["Content-type"] = "application/json;charset=UTF-8"
+    # return resp
+    groups = json.loads(open(os.path.join(base_dir, 'weblog_record_groups.json')).read())
+    for group in groups:
+        if group['depart'] == group_id:
+            return jsonify(group)
+    return jsonify(groups)
