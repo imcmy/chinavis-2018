@@ -192,7 +192,7 @@ def getcheck_time(id):
 def getsubject(email):
     subjectlist = []
     res = []
-    num = [1] * 200
+    num = [1] * 2000
     sql = "SELECT `subject` FROM email WHERE `sender` LIKE '%s'" % email
     cursor.execute(sql)
     subject = cursor.fetchall()
@@ -267,7 +267,7 @@ def getdomaintag(domain):
 def getreceiver(email):
     subjectlist = []
     res = []
-    num = [1] * 200
+    num = [1] * 20000
     email = '%' + email + '%'
     sql = "SELECT `subject` FROM email WHERE `receiver` LIKE '%s' " % email
     cursor.execute(sql)
