@@ -197,7 +197,7 @@ def getperson_department(id):
 
 
 def urltodomain(url):
-    sql = "select `domain` from url_domain WHERE `url` LIKE '%s'  " % url
+    sql = "select `domain` from urldomain WHERE `url` LIKE '%s'  " % url
     cursor.execute(sql)
     rows = cursor.fetchall()
     if (len(rows) != 0):
