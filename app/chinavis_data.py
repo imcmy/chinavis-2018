@@ -55,18 +55,20 @@ def getdomain(id):
     domain_list = []
     domain = []
     list = [1] * 10000
-    if len(rows) != 0:
+    if (len(rows) != 0):
         for line in rows:
             if line[0] not in domain_list and line[0] != '':
                 domain_list.append(line[0])
-            elif line[0] != '':
+            elif (line[0] != ''):
                 list[domain_list.index(line[0])] += 1
             else:
                 pass
         for id in range(len(domain_list)):
             domain_dict = {'name': '',
-                           'value': ''}
+                           'value': '',
+                           'tag':''}
             domain_dict['name'] = urltodomain(domain_list[id])
+            domain_dict['tag'] = getdomaintag(urltodomain(domain_list[id]))
             domain_dict['value'] = list[id]
             domain.append(domain_dict)
         return domain
@@ -201,11 +203,21 @@ def urltodomain(url):
     if (len(rows) != 0):
         for line in rows:
             domain = line[0]
-        return domain
+            return domain
     else:
         return None
 
-
+def getdomaintag(domain):
+    sql = "select tag from domain_tag WHERE `domain` LIKE '%s'  " % domain
+    cursor = db.cursor()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    if (len(rows) != 0):
+        for line in rows:
+            tag = line[0]
+            return tag
+    else:
+        return None
 
 def strintodatetime(str):
     date_time = datetime.datetime.strptime(str, '%Y-%m-%d %H:%M')
@@ -235,7 +247,6 @@ def time_list():
 
 def getuplinkdata(ip):
     count_list = [0] * 721
-
     res_list = []
     time_date_list = time_list()
     ti = 0
@@ -276,9 +287,9 @@ def getuplinkdata(ip):
         res_list.append(res)
     return res_list
 
+
 def getdownlinkdata(ip):
     count_list = [0] * 721
-
     res_list = []
     time_date_list = time_list()
     ti = 0
