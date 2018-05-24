@@ -335,7 +335,7 @@ def time_list():
 
 @data.route('/tcp/<int:post_id>', methods=['GET', 'POST'])
 def dataa(post_id):
-    ips = json.loads(open(os.path.join('ip_id.json')).read())
+    ips = json.loads(open(os.path.join(base_dir ,'ip_id.json')).read())
     for ipp in ips:
         if ipp['id'] == post_id.__str__():
             ip = ipp ['ip']
