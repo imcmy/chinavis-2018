@@ -44,16 +44,16 @@ def Person_data(post_id):
     return json.dumps(data, ensure_ascii=False)
 
 
-def getip(id):
-    sql = "select `ip` from link WHERE `id` LIKE '%d'  " % id
-    cursor.execute(sql)
-    rows = cursor.fetchall()
-    if len(rows) != 0:
-        for line in rows:
-            ip = line[0]
-        return ip
-    else:
-        return None
+# def getip(id):
+#     sql = "select `ip` from link WHERE `id` LIKE '%d'  " % id
+#     cursor.execute(sql)
+#     rows = cursor.fetchall()
+#     if len(rows) != 0:
+#         for line in rows:
+#             ip = line[0]
+#         return ip
+#     else:
+#         return None
 
 def get_tag_count(id):
     sql = 'SELECT tag,record FROM weblog_record WHERE id LIKE "%s" ' % id
