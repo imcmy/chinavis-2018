@@ -184,4 +184,5 @@ def login(user_id):
     logins = []
     for log in Login.query.filter_by(sip=ip):
         logins.append([log.sip, log.user, log.time.day, log.dip, log.state])
-    return jsonify(logins)
+    parallels = [list({log[i] for log in logins}) for i in range(5)]
+    return jsonify({"data": logins, "parallels": parallels})
