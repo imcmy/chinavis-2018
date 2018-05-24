@@ -231,7 +231,7 @@ def getsubject(email):
 
 
 def getemail(id):
-    sql = "SELECT `email` FROM link WHERE `id` LIKE '%d' " % id
+    sql = "SELECT `email` FROM link WHERE `id` LIKE '%s' " % id
     cursor.execute(sql)
     email = cursor.fetchall()
     if len(email) != 0:
