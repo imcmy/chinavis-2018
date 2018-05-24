@@ -282,8 +282,11 @@ def getreceiver(email):
             sub = {"name": "",
                    "value": "",
                    }
-            sub["name"] = res[id]
             sub["value"] = num[id]
+            if(len(res[id])>20):
+                sub["name"] = res[id][0:21]
+            else:
+                sub["name"] = res[id]
             subjectlist.append(sub)
         return subjectlist
     else:
