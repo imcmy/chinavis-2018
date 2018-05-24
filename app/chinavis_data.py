@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint
 import pymysql
 import json
@@ -318,102 +319,69 @@ def time_list():
     return list
 
 
-def getuplinkdata(ip):
-    count_list = [0] * 721
-    res_list = []
-    time_date_list = time_list()
-    ti = 0
-    sql = "SELECT stime,uplink_length FROM tcpLog WHERE sip LIKE '%s'" % ip
-    cursor.execute(sql)
-    rows = cursor.fetchall()
-    result = [0] * 721
-    for line in rows:
-        timee = line[0]
-        for id in time_date_list:
-            if (timee > strintodatetime(id) and datetimeintostr(timee)[11:13] != '23'):
-                pass
-            elif (datetimeintostr(timee)[11:13] == '23' and time_date_list[time_date_list.index(id) - 1] not in result):
-                ti = time_date_list.index(id)
-                result[ti] = time_date_list[ti]
-                count_list[ti] += line[1]
-                break
-            elif (datetimeintostr(timee)[11:13] == '23' and time_date_list[time_date_list.index(id) - 1] in result):
-                ti = time_date_list.index(id)
-                count_list[ti] += line[1]
-                break
-            elif (time_date_list[time_date_list.index(id) - 1] not in result):
-                ti = time_date_list.index(id) - 1
-                result[ti] = time_date_list[ti]
-                count_list[ti] += line[1]
-                break
-            elif (time_date_list[time_date_list.index(id) - 1] in result):
-                ti = time_date_list.index(id) - 1
-                count_list[ti] += line[1]
-                break
-    for id in time_date_list:
-        res = []
-        if (result[time_date_list.index(id)] == 0):
-            res.append(id)
-        else:
-            res.append(result[time_date_list.index(id)])
-        res.append(count_list[time_date_list.index(id)])
-        res_list.append(res)
-    return res_list
-
-
-def getdownlinkdata(ip):
-    count_list = [0] * 721
-    res_list = []
-    time_date_list = time_list()
-    ti = 0
-    sql = "SELECT stime,downlink_length FROM tcpLog WHERE sip LIKE '%s'" % ip
-    cursor.execute(sql)
-    rows = cursor.fetchall()
-    result = [0] * 721
-    for line in rows:
-        timee = line[0]
-        for id in time_date_list:
-            if (timee > strintodatetime(id) and datetimeintostr(timee)[11:13] != '23'):
-                pass
-            elif (datetimeintostr(timee)[11:13] == '23' and time_date_list[time_date_list.index(id) - 1] not in result):
-                ti = time_date_list.index(id)
-                result[ti] = time_date_list[ti]
-                count_list[ti] += line[1]
-                break
-            elif (datetimeintostr(timee)[11:13] == '23' and time_date_list[time_date_list.index(id) - 1] in result):
-                ti = time_date_list.index(id)
-                count_list[ti] += line[1]
-                break
-            elif (time_date_list[time_date_list.index(id) - 1] not in result):
-                ti = time_date_list.index(id) - 1
-                result[ti] = time_date_list[ti]
-                count_list[ti] += line[1]
-                break
-            elif (time_date_list[time_date_list.index(id) - 1] in result):
-                ti = time_date_list.index(id) - 1
-                count_list[ti] += line[1]
-                break
-    for id in time_date_list:
-        res = []
-        if (result[time_date_list.index(id)] == 0):
-            res.append(id)
-        else:
-            res.append(result[time_date_list.index(id)])
-        res.append(count_list[time_date_list.index(id)])
-        res_list.append(res)
-    return res_list
-
-
 @data.route('/tcp/<int:post_id>', methods=['GET', 'POST'])
 def dataa(post_id):
-    ip = getip(post_id)
+    ips = json.loads(open(os.path.join('ip_id.json')).read())
+    for ipp in ips:
+        if ipp['id'] == post_id.__str__():
+           ip = ipp ['ip']
 
     da = {"sip": '',
           "uplink_length": '',
           "downlink_length":'',}
     da['sip'] = ip
-    da['uplink_length'] = getuplinkdata(ip)
-    da['downlink_length'] = getdownlinkdata(ip)
+    count_list = [0] * 721
+    down_list = []
+    time_date_list = time_list()
+    up_count_list = [0] * 721
+    up_list = []
+    sql = "SELECT stime,uplink_length,downlink_length FROM tcpLog WHERE sip LIKE '%s'" % ip
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    result = [0] * 721
+    for line in rows:
+        timee = line[0]
+        for id in time_date_list:
+            if (timee > strintodatetime(id) and datetimeintostr(timee)[11:13] != '23'):
+                pass
+            elif (datetimeintostr(timee)[11:13] == '23' and time_date_list[time_date_list.index(id) - 1] not in result):
+                ti = time_date_list.index(id)
+                result[ti] = time_date_list[ti]
+                count_list[ti] += line[2]
+                up_count_list[ti]  += line[1]
+                break
+            elif (datetimeintostr(timee)[11:13] == '23' and time_date_list[time_date_list.index(id) - 1] in result):
+                ti = time_date_list.index(id)
+                count_list[ti] += line[2]
+                up_count_list[ti] += line[1]
+                break
+            elif (time_date_list[time_date_list.index(id) - 1] not in result):
+                ti = time_date_list.index(id) - 1
+                result[ti] = time_date_list[ti]
+                count_list[ti] += line[2]
+                up_count_list[ti] += line[1]
+                break
+            elif (time_date_list[time_date_list.index(id) - 1] in result):
+                ti = time_date_list.index(id) - 1
+                count_list[ti] += line[2]
+                up_count_list[ti] += line[1]
+                break
+    for id in time_date_list:
+        res = []
+        up_res = []
+        if (result[time_date_list.index(id)] == 0):
+            res.append(id)
+            up_res.append(id)
+        else:
+            res.append(result[time_date_list.index(id)])
+            up_res.append(result[time_date_list.index(id)])
+
+        res.append(count_list[time_date_list.index(id)])
+        up_res.append(up_count_list[time_date_list.index(id)])
+        down_list.append(res)
+        up_list.append(up_res)
+    da['uplink_length'] =   up_list
+    da['downlink_length'] = down_list
     return json.dumps(da, ensure_ascii=False)
 
 
