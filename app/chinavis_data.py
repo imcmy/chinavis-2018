@@ -32,6 +32,8 @@ def Person_data(post_id):
     data['check_day_time'] = getcheck_time(post_id)
     data['domain'] = getdomain(post_id)
     data['domain_rank'] = getdomain_rank(post_id)
+    data['tag_count'] = get_tag_count(post_id)
+    data['receive_email_subject'] = getreceiver(email)
     return json.dumps(data, ensure_ascii=False)
 
 
@@ -46,6 +48,48 @@ def getip(id):
     else:
         return None
 
+def get_tag_count(id):
+    sql = 'SELECT tag,record FROM weblog_record WHERE id LIKE "%s" ' % id
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    tag = []
+    if (len(rows) != 0):
+        for line in rows:
+            if (line[0] == '开发'):
+                kaifa_dict = {'name': '开发',
+                              'value': line[1], }
+                tag.append(kaifa_dict)
+            elif (line[0] == '办公'):
+                bangong_dict = {'name': '办公',
+                                'value': line[1], }
+                tag.append(bangong_dict)
+            elif (line[0] == '娱乐'):
+                yule_dict = {'name': '娱乐',
+                             'value': line[1], }
+                tag.append(yule_dict)
+            elif (line[0] == '技术'):
+                jishu_dict = {'name': '技术',
+                              'value': line[1], }
+                tag.append(jishu_dict)
+            elif (line[0] == '招聘'):
+                zhaopin_dict = {'name': '招聘',
+                                'value': line[1], }
+                tag.append(zhaopin_dict)
+            elif (line[0] == '搜索'):
+                sousuo_dict = {'name': '搜索',
+                               'value': line[1], }
+                tag.append(sousuo_dict)
+            elif (line[0] == '购物'):
+                gouwu_dict = {'name': '购物',
+                              'value': line[1], }
+                tag.append(gouwu_dict)
+            elif (line[0] == '赌博'):
+                dubo_dict = {'name': '赌博',
+                             'value': line[1], }
+                tag.append(dubo_dict)
+        return tag
+    else:
+        return None
 
 def getdomain(id):
     ip = getip(id)
@@ -217,6 +261,31 @@ def getdomaintag(domain):
         for line in rows:
             tag = line[0]
             return tag
+    else:
+        return None
+
+def getreceiver(email):
+    subjectlist = []
+    res = []
+    num = [1] * 200
+    email = '%' + email + '%'
+    sql = "SELECT `subject` FROM email WHERE `receiver` LIKE '%s' " % email
+    cursor.execute(sql)
+    subject = cursor.fetchall()
+    if (len(subject) != 0):
+        for line in subject:
+            if (line[0] not in res):
+                res.append(line[0])
+            else:
+                num[res.index(line[0])] += 1
+        for id in range(len(res)):
+            sub = {"name": "",
+                   "value": "",
+                   }
+            sub["name"] = res[id]
+            sub["value"] = num[id]
+            subjectlist.append(sub)
+        return subjectlist
     else:
         return None
 
