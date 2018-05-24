@@ -4,6 +4,7 @@ import pymysql
 import json
 import datetime
 
+base_dir = os.path.dirname(__file__) + '/json_statics/'
 
 db = pymysql.connect("123.206.64.248", "root", "chinavis2018", "chinavis", charset='utf8')
 cursor = db.cursor()
@@ -321,7 +322,7 @@ def time_list():
 
 @data.route('/tcp/<int:post_id>', methods=['GET', 'POST'])
 def dataa(post_id):
-    ips = json.loads(open(os.path.join('ip_id.json')).read())
+    ips = json.loads(open(os.path.join(base_dir,'ip_id.json')).read())
     for ipp in ips:
         if ipp['id'] == post_id.__str__():
            ip = ipp ['ip']
