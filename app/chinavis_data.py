@@ -27,7 +27,12 @@ def Person_data(post_id):
         'domain': '',
         'domain_rank': '',
     }
-    data['ip'] = getip(post_id)
+    ips = json.loads(open(os.path.join(base_dir,'ip_id.json')).read())
+    for ipp in ips:
+        if ipp['id'] == post_id.__str__():
+           ip = ipp ['ip']
+    data['ip'] = ip
+    #data['ip'] = getip(post_id)
     email = getemail(post_id)
     data['email_subject'] = getsubject(email)
     data['department'] = getperson_department(post_id)
@@ -94,7 +99,11 @@ def get_tag_count(id):
         return None
 
 def getdomain(id):
-    ip = getip(id)
+    ips = json.loads(open(os.path.join(base_dir,'ip_id.json')).read())
+    for ipp in ips:
+        if ipp['id'] == id.__str__():
+           ip = ipp ['ip']
+    #ip = getip(id)
     sql = "select `host` from weblog WHERE `sip` LIKE '%s'" % ip
     cursor.execute(sql)
     rows = cursor.fetchall()
@@ -124,7 +133,11 @@ def getdomain(id):
 
 
 def getdomain_rank(id):
-    ip = getip(id)
+    ips = json.loads(open(os.path.join(base_dir,'ip_id.json')).read())
+    for ipp in ips:
+        if ipp['id'] == id.__str__():
+           ip = ipp ['ip']
+    #ip = getip(id)
     sql = "select `host` from weblog WHERE `sip` LIKE '%s'" % ip
     cursor.execute(sql)
     rows = cursor.fetchall()
