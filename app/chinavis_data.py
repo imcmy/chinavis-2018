@@ -58,9 +58,9 @@ def getdomain(id):
     if (len(rows) != 0):
         for line in rows:
             doo = urltodomain(line[0])
-            if doo not in domain_list and doo != '':
+            if doo not in domain_list and doo != None:
                 domain_list.append(doo)
-            elif (doo != ''):
+            elif (doo != None):
                 list[domain_list.index(doo)] += 1
             else:
                 pass
@@ -68,8 +68,8 @@ def getdomain(id):
             domain_dict = {'name': '',
                            'value': '',
                            'tag':''}
-            domain_dict['name'] = urltodomain(domain_list[id])
-            domain_dict['tag'] = getdomaintag(urltodomain(domain_list[id]))
+            domain_dict['name'] = domain_list[id]
+            domain_dict['tag'] = getdomaintag(domain_list[id])
             domain_dict['value'] = list[id]
             domain.append(domain_dict)
         return domain
