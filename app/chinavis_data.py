@@ -100,6 +100,7 @@ def get_tag_count(id):
 
 def getdomain(id):
     ips = json.loads(open(os.path.join(base_dir,'ip_id.json')).read())
+    ip = ''
     for ipp in ips:
         if ipp['id'] == id.__str__():
            ip = ipp ['ip']
@@ -134,6 +135,7 @@ def getdomain(id):
 
 def getdomain_rank(id):
     ips = json.loads(open(os.path.join(base_dir,'ip_id.json')).read())
+    ip = ''
     for ipp in ips:
         if ipp['id'] == id.__str__():
            ip = ipp ['ip']
