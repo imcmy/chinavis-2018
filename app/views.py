@@ -1,6 +1,6 @@
 import os
 import json
-from .models import User, Email, WebRecord
+from .models import User, Email, WebRecord, Login
 from flask import Blueprint, request, jsonify, make_response
 
 view = Blueprint('view', __name__, url_prefix='/')
@@ -176,3 +176,12 @@ def weblog_record_groups(group_id):
         if group['depart'] == group_id:
             return jsonify(group)
     return jsonify(groups)
+
+
+@view.route('/login/<user_id>', methods=('GET',))
+def login(user_id):
+    ip = User.query.filter_by(id=user_id).first().ip
+    logins = []
+    for log in Login.query.filter_by(sip=ip):
+        logins.append([log.sip, log.user, log.time.day, log.dip, log.state])
+    return jsonify(logins)

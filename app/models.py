@@ -39,3 +39,17 @@ class WebRecord(db.Model):
     id = db.Column(db.String(4))
     tag = db.Column(db.String(255))
     record = db.Column(db.Integer)
+
+
+class Login(db.Model):
+    __tablename__ = 'login'
+
+    id = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.DateTime)
+    user = db.Column(db.String(255))
+    proto = db.Column(db.String(255))
+    sip = db.Column(db.String(255))
+    sport = db.Column(db.Integer)
+    dip = db.Column(db.String(255))
+    dport = db.Column(db.Integer)
+    state = db.Column(db.String(255))
