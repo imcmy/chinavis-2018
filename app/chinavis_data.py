@@ -57,10 +57,11 @@ def getdomain(id):
     list = [1] * 10000
     if (len(rows) != 0):
         for line in rows:
-            if line[0] not in domain_list and line[0] != '':
-                domain_list.append(line[0])
-            elif (line[0] != ''):
-                list[domain_list.index(line[0])] += 1
+            doo = urltodomain(line[0])
+            if doo not in domain_list and doo != '':
+                domain_list.append(doo)
+            elif (doo != ''):
+                list[domain_list.index(doo)] += 1
             else:
                 pass
         for id in range(len(domain_list)):
