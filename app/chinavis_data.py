@@ -298,8 +298,8 @@ def getreceiver(email):
                    "value": "",
                    }
             sub["value"] = num[id]
-            if(len(res[id])>15):
-                sub["name"] = res[id][0:16]
+            if(len(res[id])>10):
+                sub["name"] = res[id][0:11]
             else:
                 sub["name"] = res[id]
             subjectlist.append(sub)
