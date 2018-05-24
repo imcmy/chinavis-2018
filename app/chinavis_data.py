@@ -283,7 +283,7 @@ def getreceiver(email):
     subjectlist = []
     res = []
     num = [1] * 20000
-    email = '%' + email + '%'
+    # email = '%' + email + '%'
     sql = "SELECT `subject` FROM email WHERE `receiver` LIKE '%s' " % email
     cursor.execute(sql)
     subject = cursor.fetchall()
