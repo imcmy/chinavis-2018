@@ -335,7 +335,7 @@ def time_list():
 
 @data.route('/tcp/<int:post_id>', methods=['GET', 'POST'])
 def dataa(post_id):
-    ips = json.loads(open(os.path.join(base_dir ,'ip_id.json')).read())
+    ips = json.loads(open(os.path.join(base_dir,'ip_id.json')).read())
     for ipp in ips:
         if ipp['id'] == post_id.__str__():
             ip = ipp ['ip']
@@ -346,24 +346,25 @@ def dataa(post_id):
     tcp['time'] = time_date_list
     uplink = [0] * 720
     downlink = [0] * 720
-    sql = "SELECT stime,uplink_length,downlink_length FROM tcpLog WHERE sip LIKE '%s'" % ip
-    cursor.execute(sql)
-    rows = cursor.fetchall()
-    k = 0
-    if len(rows) !=0 :
-        for line in rows:
+    tcps = json.loads(open(os.path.join(base_dir,'tcplog.json')).read())
+    for tc in tcps:
+        line = []
+        if tc['sip'] == ip:
+            line.append(tc['stime'])
+            line.append(tc['uplink_length'])
+            line.append(tc['downlink_length'])
             timee = line[0]
-            for id in time_date_list:
-                 if(id[0:13] == datetimeintostr(timee)[0:13]):
-                     ti = time_date_list.index(id)
+            for idd in time_date_list:
+                 if(idd[0:13] == timee[0:13]):
+                     ti = time_date_list.index(idd)
                      uplink[ti] += line[1]
                      downlink[ti] += line[2]
 
-        tcp['uplink_length'] = uplink
-        tcp['downlink_length'] = downlink
-        return json.dumps(tcp,ensure_ascii=False)
+    tcp['uplink_length'] = uplink
+    tcp['downlink_length'] = downlink
+    return json.dumps(tcp,ensure_ascii=False)
 
-    else:
-        return None
+
+
 
 
