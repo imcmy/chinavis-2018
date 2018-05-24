@@ -30,8 +30,8 @@ def Person_data(post_id):
     ips = json.loads(open(os.path.join(base_dir,'ip_id.json')).read())
     for ipp in ips:
         if ipp['id'] == post_id.__str__():
-           ip = ipp ['ip']
-    data['ip'] = ip
+           data['ip'] = ipp ['ip']
+    #data['ip'] = ip
     #data['ip'] = getip(post_id)
     email = getemail(post_id)
     data['email_subject'] = getsubject(email)
