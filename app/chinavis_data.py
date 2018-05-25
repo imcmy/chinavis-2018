@@ -173,7 +173,7 @@ def getdomain_rank(id):
 
 
 def getcheck_time(id):
-    sql = "select  `checkin`,`checkout`,`day` from checking WHERE id  LIKE '%d'  " % id
+    sql = "select  `checkin`,`checkout`,`day` from checking2 WHERE id  LIKE '%d'  " % id
     cursor.execute(sql)
     rows = cursor.fetchall()
     arraylist = []
@@ -335,36 +335,36 @@ def time_list():
     return list
 
 
-@data.route('/tcp/<int:post_id>', methods=['GET', 'POST'])
-def dataa(post_id):
-    ips = json.loads(open(os.path.join(base_dir,'ip_id.json')).read())
-    for ipp in ips:
-        if ipp['id'] == post_id.__str__():
-            ip = ipp ['ip']
-    tcp = {'time':[],
-           'uplink_length':[],
-           'downlink_length':[]}
-    time_date_list = time_list()
-    tcp['time'] = time_date_list
-    uplink = [0] * 720
-    downlink = [0] * 720
-    tcps = json.loads(open(os.path.join(base_dir,'tcplog.json')).read())
-    for tc in tcps:
-        line = []
-        if tc['sip'] == ip:
-            line.append(tc['stime'])
-            line.append(tc['uplink_length'])
-            line.append(tc['downlink_length'])
-            timee = line[0]
-            for idd in time_date_list:
-                 if(idd[0:13] == timee[0:13]):
-                     ti = time_date_list.index(idd)
-                     uplink[ti] += line[1]
-                     downlink[ti] += line[2]
-
-    tcp['uplink_length'] = uplink
-    tcp['downlink_length'] = downlink
-    return json.dumps(tcp,ensure_ascii=False)
+# @data.route('/tcp/<int:post_id>', methods=['GET', 'POST'])
+# def dataa(post_id):
+#     ips = json.loads(open(os.path.join(base_dir,'ip_id.json')).read())
+#     for ipp in ips:
+#         if ipp['id'] == post_id.__str__():
+#             ip = ipp ['ip']
+#     tcp = {'time':[],
+#            'uplink_length':[],
+#            'downlink_length':[]}
+#     time_date_list = time_list()
+#     tcp['time'] = time_date_list
+#     uplink = [0] * 720
+#     downlink = [0] * 720
+#     tcps = json.loads(open(os.path.join(base_dir,'tcplog.json')).read())
+#     for tc in tcps:
+#         line = []
+#         if tc['sip'] == ip:
+#             line.append(tc['stime'])
+#             line.append(tc['uplink_length'])
+#             line.append(tc['downlink_length'])
+#             timee = line[0]
+#             for idd in time_date_list:
+#                  if(idd[0:13] == timee[0:13]):
+#                      ti = time_date_list.index(idd)
+#                      uplink[ti] += line[1]
+#                      downlink[ti] += line[2]
+#
+#     tcp['uplink_length'] = uplink
+#     tcp['downlink_length'] = downlink
+#     return json.dumps(tcp,ensure_ascii=False)
 
 
 
