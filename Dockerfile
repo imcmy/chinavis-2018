@@ -3,7 +3,7 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /usr/src/app
 
-EXPOSE 5000
+ADD requirements.txt /tmp
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
-ADD . .
-RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE 5000
