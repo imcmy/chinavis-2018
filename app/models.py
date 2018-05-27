@@ -53,3 +53,18 @@ class Login(db.Model):
     dip = db.Column(db.String(255))
     dport = db.Column(db.Integer)
     state = db.Column(db.String(255))
+
+
+class TcpLog(db.Model):
+    __tablename__ = 'tcpLog'
+
+    id = db.Column(db.Integer, primary_key=True)
+    stime = db.Column(db.DateTime)
+    dtime = db.Column(db.DateTime)
+    proto = db.Column(db.String(255))
+    sip = db.Column(db.String(255))
+    sport = db.Column(db.Integer)
+    dip = db.Column(db.String(255))
+    dport = db.Column(db.Integer)
+    uplink_length = db.Column(db.Integer)
+    downlink_length = db.Column(db.Integer)

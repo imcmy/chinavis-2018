@@ -1,6 +1,7 @@
 import os
 import json
-from .models import User, Email, WebRecord, Login
+import datetime
+from .models import User, Email, WebRecord, Login, TcpLog
 from flask import Blueprint, request, jsonify, make_response
 
 view = Blueprint('view', __name__, url_prefix='/')
@@ -186,3 +187,30 @@ def login(user_id):
         logins.append([log.sip, log.user, log.time.day, log.dip, log.state])
     parallels = [list({log[i] for log in logins}) for i in range(5)]
     return jsonify({"data": logins, "parallels": parallels})
+
+
+@view.route('/tcplog/<id_or_ip>', methods=('GET',))
+def tcpLog(id_or_ip):
+    if len(id_or_ip) == 4:
+        ip = User.query.filter_by(id=id_or_ip).first().ip
+    else:
+        ip = id_or_ip
+    x_axis = []
+    for day in range(1, 31):
+        for hour in range(24):
+            a_hour = datetime.datetime(2017, 11, day) + datetime.timedelta(hours=hour)
+            x_axis.append(str(a_hour))
+    up_axis = [0] * len(x_axis)
+    down_axis = [0] * len(x_axis)
+    protocols = ["smtp", "ssh", "ftp", "tds", "mysql", "mongodb", "postgresql", "sftp", "http"]
+    protocol_axis = [{"name": protocol, "type": "line", "data": [0] * len(x_axis)} for protocol in protocols]
+    for log in TcpLog.query.filter_by(sip=ip):
+        key = x_axis.index(str(datetime.datetime(2017, 11, log.stime.day, log.stime.hour)))
+        up_axis[key] += log.uplink_length
+        down_axis[key] += log.downlink_length
+        for protocol in protocol_axis:
+            if protocol['name'] == log.proto:
+                protocol['data'][key] += (log.uplink_length + log.downlink_length)
+                break
+    return jsonify({'xAxis': x_axis, "upAxis": up_axis, "downAxis": down_axis,
+                    "protocols": protocol_axis, "legend": protocols})
