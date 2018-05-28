@@ -41,8 +41,9 @@ def Person_data(post_id):
     data['domain_rank'] = getdomain_rank(post_id)
     data['tag_count'] = get_tag_count(post_id)
     data['receive_email_subject'] = getreceiver(email)
-    return json.dumps(data, ensure_ascii=False)
+    cursor.close()
     db.close()
+    return json.dumps(data, ensure_ascii=False)
 
 # def getip(id):
 #     sql = "select `ip` from link WHERE `id` LIKE '%d'  " % id
