@@ -42,7 +42,7 @@ def Person_data(post_id):
     data['tag_count'] = get_tag_count(post_id)
     data['receive_email_subject'] = getreceiver(email)
     return json.dumps(data, ensure_ascii=False)
-
+    db.close()
 
 # def getip(id):
 #     sql = "select `ip` from link WHERE `id` LIKE '%d'  " % id
