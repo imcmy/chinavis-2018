@@ -366,5 +366,5 @@ def time_list():
 #     return json.dumps(tcp,ensure_ascii=False)
 
 
- db.close()
+
 
