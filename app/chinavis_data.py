@@ -41,7 +41,6 @@ def Person_data(post_id):
     data['domain_rank'] = getdomain_rank(post_id)
     data['tag_count'] = get_tag_count(post_id)
     data['receive_email_subject'] = getreceiver(email)
-    db.close()
     return json.dumps(data, ensure_ascii=False)
 
 # def getip(id):
@@ -367,6 +366,5 @@ def time_list():
 #     return json.dumps(tcp,ensure_ascii=False)
 
 
-
-
+ db.close()
 
