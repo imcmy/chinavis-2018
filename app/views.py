@@ -184,8 +184,9 @@ def login(user_id):
     ip = User.query.filter_by(id=user_id).first().ip
     logins = []
     for log in Login.query.filter_by(sip=ip):
-        logins.append([log.sip, log.user, log.time.day, log.dip, log.state])
-    parallels = [list({log[i] for log in logins}) for i in range(5)]
+        hour = str(log.time.hour).zfill(2) + ":" + ("30" if log.time.minute > 30 else "00")
+        logins.append([log.sip, log.user, log.time.day, hour, log.dip, log.state])
+    parallels = [sorted(list({log[i] for log in logins})) for i in range(6)]
     return jsonify({"data": logins, "parallels": parallels})
 
 
@@ -205,7 +206,7 @@ def tcpLog(id_or_ip):
     protocols = ["smtp", "ssh", "ftp", "tds", "mysql", "mongodb", "postgresql", "sftp", "http"]
     protocol_axis = [{"name": protocol, "type": "line", "data": [0] * len(x_axis)} for protocol in protocols]
     for log in TcpLog.query.filter_by(sip=ip):
-        key = x_axis.index(str(datetime.datetime(2017, 11, log.stime.day, log.stime.hour)))
+        key = x_axis.index(str(datetime.datetime(2017, 11, log.stime.day, hour=log.stime.hour)))
         up_axis[key] += log.uplink_length
         down_axis[key] += log.downlink_length
         for protocol in protocol_axis:
