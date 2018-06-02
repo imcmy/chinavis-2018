@@ -227,10 +227,7 @@ def getsubject(email):
         for id in range(len(res)):
             sub = {"name": "",
                    "value": ""}
-            if (res[id] == 'EmergencyDataBaseFata'):
-                sub["name"] = '数据库异常报警'
-            else:
-                sub["name"] = res[id]
+            sub["name"] = res[id]
             sub["value"] = num[id]
             subjectlist.append(sub)
         return subjectlist
