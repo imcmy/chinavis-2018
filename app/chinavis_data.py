@@ -311,12 +311,13 @@ def getreceiver(email):
                    }
             sub["value"] = num[id]
             if (len(res[id]) > 20):
-                if (res[id] == 'EmergencyDataBaseFata'):
+                if (res[id] == 'EmergencyDataBaseFatalError!'):
                     sub["name"] = '数据库异常报警'
                 else:
                     sub["name"] = res[id][0:21]
+
             else:
-                if (res[id] == 'EmergencyDataBaseFata'):
+                if (res[id] == 'EmergencyDataBaseFatalError!'):
                     sub["name"] = '数据库异常报警'
                 else:
                     sub["name"] = res[id][0:21]
