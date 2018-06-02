@@ -21,7 +21,7 @@ def test():
 def Person_data(post_id):
     if(post_id == 1487 or post_id == 1284):
         da = json.loads(open(os.path.join(base_dir, post_id.__str__()+'.json')).read())
-        return jsonify(da)
+        return json.dumps(da, ensure_ascii=False)
     else:
         data = {
             'ip': '',
