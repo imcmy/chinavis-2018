@@ -19,29 +19,33 @@ def test():
 
 @data.route('/<int:post_id>', methods=['GET', 'POST'])
 def Person_data(post_id):
-    data = {
-        'ip': '',
-        'department': '',
-        'email_subject': '',
-        'check_day_time': '',
-        'domain': '',
-        'domain_rank': '',
-    }
-    ips = json.loads(open(os.path.join(base_dir,'ip_id.json')).read())
-    for ipp in ips:
-        if ipp['id'] == post_id.__str__():
-           data['ip'] = ipp ['ip']
-    #data['ip'] = ip
-    #data['ip'] = getip(post_id)
-    email = getemail(post_id)
-    data['email_subject'] = getsubject(email)
-    data['department'] = getperson_department(post_id)
-    data['check_day_time'] = getcheck_time(post_id)
-    data['domain'] = getdomain(post_id)
-    data['domain_rank'] = getdomain_rank(post_id)
-    data['tag_count'] = get_tag_count(post_id)
-    data['receive_email_subject'] = getreceiver(email)
-    return json.dumps(data, ensure_ascii=False)
+    if(post_id == 1487 or post_id == 1284):
+        da = json.loads(open(os.path.join(base_dir, post_id.__str__()+'.json')).read())
+        return json.dumps(da, ensure_ascii=False)
+    else:
+        data = {
+            'ip': '',
+            'department': '',
+            'email_subject': '',
+            'check_day_time': '',
+            'domain': '',
+            'domain_rank': '',
+        }
+        ips = json.loads(open(os.path.join(base_dir,'ip_id.json')).read())
+        for ipp in ips:
+            if ipp['id'] == post_id.__str__():
+               data['ip'] = ipp ['ip']
+        #data['ip'] = ip
+        #data['ip'] = getip(post_id)
+        email = getemail(post_id)
+        data['email_subject'] = getsubject(email)
+        data['department'] = getperson_department(post_id)
+        data['check_day_time'] = getcheck_time(post_id)
+        data['domain'] = getdomain(post_id)
+        data['domain_rank'] = getdomain_rank(post_id)
+        data['tag_count'] = get_tag_count(post_id)
+        data['receive_email_subject'] = getreceiver(email)
+        return json.dumps(data, ensure_ascii=False)
 
 # def getip(id):
 #     sql = "select `ip` from link WHERE `id` LIKE '%d'  " % id
