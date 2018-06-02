@@ -311,9 +311,15 @@ def getreceiver(email):
                    }
             sub["value"] = num[id]
             if (len(res[id]) > 20):
-                sub["name"] = res[id][0:21]
+                if (res[id] == 'EmergencyDataBaseFata'):
+                    sub["name"] = '数据库异常报警'
+                else:
+                    sub["name"] = res[id][0:21]
             else:
-                sub["name"] = res[id]
+                if (res[id] == 'EmergencyDataBaseFata'):
+                    sub["name"] = '数据库异常报警'
+                else:
+                    sub["name"] = res[id][0:21]
             subjectlist.append(sub)
         return subjectlist
     else:
